@@ -18,7 +18,7 @@ class TagsFieldController extends Controller
         $query = Tag::query();
 
         if ($request->has('filter.containing')) {
-            $query->containing($request['filter']['containing']);
+            $query->containing($request['filter']['containing'], 'pt');
         }
 
         if ($request->has('filter.type')) {
@@ -30,11 +30,11 @@ class TagsFieldController extends Controller
         }
 
         $sorted = $query->get()->sortBy(function (Tag $tag) {
-            return strtolower($tag->name);
-        })->values();
+            return strtolower($tag->getTranslation('name', 'pt'));
+		})->values();
 
         return $sorted->map(function (Tag $tag) {
-            return $tag->name;
+            return $tag->getTranslation('name', 'pt');
         });
     }
 }
